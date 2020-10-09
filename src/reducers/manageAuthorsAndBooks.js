@@ -39,6 +39,7 @@
 // }
 
 import { combineReducers } from 'redux';
+import uuid from 'uuid';
 
 const rootReducer = combineReducers({
   authors: authorsReducer,
@@ -65,6 +66,19 @@ function authorsReducer(state = [], action) {
   let idx
 
   switch (action.type) {
+    case 'ADD_BOOK':
+      let existingAuthor = state.filter(
+        author => author.authorName === action.book.authorName
+      )
+
+      if (existingAuthor.length > 0) {
+        // if author exists just return the state
+        return state
+      } else {
+        // return the new state with the new author added to it
+        return [...state, { authorName: action.book.authorName, id: uuid() }];
+      }
+
     case 'ADD_AUTHOR':
       return [...state, action.author]
 
